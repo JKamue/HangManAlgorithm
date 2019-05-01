@@ -6,7 +6,7 @@ import java.util.Scanner;
 /**
  * Example implementation of the HangManSolver class
  * 
- * @author  mail
+ * @author  JKamue
  * @version 1.0
  * @since   2019-04-30 
  */
