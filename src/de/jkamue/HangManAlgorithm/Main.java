@@ -108,7 +108,7 @@ public class Main {
 	public static String stringify(char[] tmp) {
 		String ret = "";
 		for (int i=0; i<tmp.length; i++) {
-			ret += tmp[i];
+			ret += tmp[i]+" ";
 		}
 		return ret;
 	}

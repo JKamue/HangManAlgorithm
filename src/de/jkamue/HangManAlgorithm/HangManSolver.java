@@ -1,7 +1,5 @@
 package de.jkamue.HangManAlgorithm;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
