@@ -11,13 +11,13 @@ import java.util.Scanner;
  */
 public class HangManSolver {
 	/** Stores the available word lists*/
-	static String[] lists = "w10000-w100000-w460000-w1000000".split("-");
+	public static String[] lists = "w10000-w100000-w460000-w1000000".split("-");
 	/** The English alphabet */
-	static char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	public static char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 	/** Most used characters in English language */
-	static char[] mostUsed = "eariotnslcudpmhgbfywkvxzjq".toCharArray();
+	public static char[] mostUsed = "eariotnslcudpmhgbfywkvxzjq".toCharArray();
 	/** Character to symbolize empty char */
-	static char empty = "_".charAt(0);
+	public static char empty = "_".charAt(0);
 	
 	/**
 	 * Function that predicts the next most likely character of a word based on a wordlist
