@@ -1,0 +1,7 @@
+6
+abcdefghijklmnopqrstuvwxyz
+eariotnslcudpmhgbfywkvxzjq
+Simple frequently used word-w10000
+Known word-w100000
+Rarely used word-w460000
+Highly specific word-w1000000
