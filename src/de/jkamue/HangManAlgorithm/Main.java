@@ -7,12 +7,12 @@ import java.util.Scanner;
  * Example implementation of the HangManSolver class
  * 
  * @author  JKamue
- * @version 1.0
- * @since   2019-04-30 
+ * @version 2.0
+ * @since   2019-05-03 
  */
 public class Main {
 	/** Stores the checked letters */
-	static char[] checked = new char[HangManSolver.alphabet.length];
+	static char[] checked;
 	/** Stores the word known by the pc */
 	static char[] guessed;
 	/** Stores the word */
@@ -28,31 +28,47 @@ public class Main {
 		Scanner k = new Scanner(System.in);
 		
 		System.out.println("Hangman solver by JKamue");
-		System.out.println("Please enter an English word");
+		
+		String[] languages = HangManSolver.getLanguages();
+		
+		// List all languages
+		System.out.println("Which language do you choose? (input numbers)");
+		for (int i = 0; i < languages.length; i++) {
+			System.out.println("  " + (i+1) + ". " + languages[i]);
+		}
+		
+		int lang = k.nextInt();
+		
+		System.out.println("Please enter a word");
 		System.out.println("You are allowed to use each letter in the alphabet but no spaces");
 		
 		// Receive word and convert it to char array
 		String input = k.next();
 		word = input.toLowerCase().toCharArray();
 		
-		// Create the array containing the guessed values
-		guessed = new char[word.length];
-		Arrays.fill(guessed,HangManSolver.empty);
+		String[] language = HangManSolver.getLanguage(languages[lang-1]);
 		
+		// List wordlists
 		System.out.println("How hard do you think your word is?");
-		System.out.println("   1. Simple frequently used word");
-		System.out.println("   2. Known word");
-		System.out.println("   3. Rarely used word");
-		System.out.println("   4. Highly specific word");
+		for (int i = 2; i < language.length; i++) {
+			System.out.println(" " + (i-1) + ". " + language[i].split("-")[0]);
+		}
 		
 		// Receive the wordlist
-		String wordlist = HangManSolver.lists[k.nextInt()-1]+".txt";
+		HangManSolver solver = new HangManSolver(language, k.nextInt(),languages[lang-1]);
+		
+		// Create array to store already checked characters
+		checked = new char[solver.alphabet.length];
+		
+		// Create the array containing the guessed values
+		guessed = new char[word.length];
+		Arrays.fill(guessed,solver.empty);		
 		
 		// Loop till the word is found
 		System.out.println("-------------------");
-		while (HangManSolver.contains(guessed,HangManSolver.empty)) {
+		while (HangManSolver.contains(guessed,solver.empty)) {
 			// Make a guess for the next character based on the wordlist
-			char next = HangManSolver.nextGuess(guessed, checked, wordlist);
+			char next = solver.nextGuess(guessed, checked);
 			System.out.println("Guessing "+next);
 			if (checkLetter(next)) {
 				System.out.println("The character was in the word");
