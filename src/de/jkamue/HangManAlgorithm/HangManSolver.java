@@ -6,18 +6,62 @@ import java.util.Scanner;
 /**
  * 
  * @author  JKamue
- * @version 1.0
- * @since   2019-04-30 
+ * @version 2.0
+ * @since   2019-05-03
  */
 public class HangManSolver {
-	/** Stores the available word lists*/
-	public static String[] lists = "w10000-w100000-w460000-w1000000".split("-");
 	/** The English alphabet */
-	public static char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	public char[] alphabet;
 	/** Most used characters in English language */
-	public static char[] mostUsed = "eariotnslcudpmhgbfywkvxzjq".toCharArray();
+	private char[] mostUsed;
 	/** Character to symbolize empty char */
-	public static char empty = "_".charAt(0);
+	public final char empty;
+	/** The wordlist the user chose */
+	private String wordlist;
+	
+	/**
+	 * Creates a new HangMan solver with a mode 0-3
+	 * 
+	 * @param mode The size of the wordlist (0 smallest, 3 biggest)
+	 */
+	public HangManSolver(String[] lang, int mode, String language) {
+		alphabet = lang[0].toCharArray();
+		mostUsed = lang[1].toCharArray();
+		empty = "_".charAt(0);
+		wordlist = language + "/" + lang[mode+1].split("-")[1]+".txt";
+	}
+	
+	/**
+	 * Generates and returns a language list
+	 * 
+	 * @return String with all available languages
+	 */
+	public static String[] getLanguages() {
+		Scanner lang = readFile("lang.txt");
+		String[] languages = new String[lang.nextInt()];
+		for (int i=0; i < languages.length; i++) {
+			languages[i] = lang.next();
+		}
+		return languages;
+	}
+	
+	/**
+	 * Gets more information on one language
+	 * 
+	 * @param code The short code of the language
+	 * @return Available languages
+	 */
+	public static String[] getLanguage(String code) {
+		Scanner lang = readFile(code + "/" + code + ".txt");
+		String[] language = new String[lang.nextInt()];
+		language[0] = lang.next();
+		language[1] = lang.next();
+		lang.nextLine();
+		for (int i=2; i < language.length; i++) {
+			language[i] = lang.nextLine();
+		}
+		return language;
+	}
 	
 	/**
 	 * Function that predicts the next most likely character of a word based on a wordlist
@@ -28,7 +72,7 @@ public class HangManSolver {
 	 * @param wordlist The Word List that should be used (10000|100000|460000|1000000)
 	 * @return The character that is most likely to fill a blank
 	 */
-	public static char nextGuess(char[] guessed, char[] checked, String wordlist) {
+	public char nextGuess(char[] guessed, char[] checked) {
 		char mostLikely = getMostUsedChar(goThroughFile(guessed,checked,wordlist));
 		// If the word is not in the dictionary take next most likely character from dictionary
 		if (mostLikely == empty) {
@@ -66,10 +110,9 @@ public class HangManSolver {
 	 * @param name The name of the file
 	 * @return Scanner with the file opened
 	 */
-	private static Scanner readFile(String name) {
+	private static Scanner readFile(String filename) {
 		Scanner reader = null;
-		
-		reader = new Scanner(Main.class.getResourceAsStream("/" + name));
+		reader = new Scanner(HangManSolver.class.getResourceAsStream("/" + filename));
 		return reader;
 	}
 	
@@ -81,7 +124,7 @@ public class HangManSolver {
 	 * @param wordlist The Word LIst that should be used
 	 * @return A hashmap with each character and its frequency
 	 */
-	private static HashMap<Character, Integer> goThroughFile(char[] guessed, char[] checked, String wordlist) {
+	private HashMap<Character, Integer> goThroughFile(char[] guessed, char[] checked, String wordlist) {
 		// Hashmap with entry for each character
 		HashMap<Character, Integer> possibleChars = new HashMap<Character, Integer>();
 		for (int i=0; i < alphabet.length; i++) {
@@ -138,7 +181,7 @@ public class HangManSolver {
 	 * @param possibleChars The hashmap with the character as key and the amount as value
 	 * @return The most used character
 	 */
-	private static char getMostUsedChar(HashMap<Character, Integer> possibleChars) {
+	private char getMostUsedChar(HashMap<Character, Integer> possibleChars) {
 		char finalChar = empty;
 		int uses = 0;
 		for (int i = 0; i < possibleChars.size(); i++) {
